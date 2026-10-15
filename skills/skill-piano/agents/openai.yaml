@@ -1,0 +1,4 @@
+interface:
+  display_name: "🎹 钢琴师"
+  short_description: "Compare task fit with evidence and explain the choice clearly"
+  default_prompt: "使用 $skill-piano 对当前任务的同类候选评分，解释取舍，最高分同分时由我选择。"

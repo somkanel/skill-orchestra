@@ -1,0 +1,65 @@
+{
+  "schema": "skill-orchestra/score-1",
+  "task": "Synthetic example: create an editable brand deck",
+  "stage": "Create slides",
+  "candidates": [
+    {
+      "id": "deck-a",
+      "name": "Synthetic deck-a",
+      "path": "/synthetic/deck-a/SKILL.md",
+      "eligibility": "eligible",
+      "eligibility_evidence": "Synthetic fixture: editable output and required tools assumed available.",
+      "scores": {
+        "delivery": {
+          "grade": 2,
+          "evidence": "Synthetic fixture: delivery assessment, not a real skill check."
+        },
+        "coverage": {
+          "grade": 2,
+          "evidence": "Synthetic fixture: coverage assessment, not a real skill check."
+        },
+        "environment": {
+          "grade": 2,
+          "evidence": "Synthetic fixture: environment assessment, not a real skill check."
+        },
+        "constraints": {
+          "grade": 1,
+          "evidence": "Synthetic fixture: constraints assessment, not a real skill check."
+        },
+        "workflow": {
+          "grade": 1,
+          "evidence": "Synthetic fixture: workflow assessment, not a real skill check."
+        }
+      }
+    },
+    {
+      "id": "deck-b",
+      "name": "Synthetic deck-b",
+      "path": "/synthetic/deck-b/SKILL.md",
+      "eligibility": "eligible",
+      "eligibility_evidence": "Synthetic fixture: editable output and required tools assumed available.",
+      "scores": {
+        "delivery": {
+          "grade": 2,
+          "evidence": "Synthetic fixture: delivery assessment, not a real skill check."
+        },
+        "coverage": {
+          "grade": 1,
+          "evidence": "Synthetic fixture: coverage assessment, not a real skill check."
+        },
+        "environment": {
+          "grade": 2,
+          "evidence": "Synthetic fixture: environment assessment, not a real skill check."
+        },
+        "constraints": {
+          "grade": 2,
+          "evidence": "Synthetic fixture: constraints assessment, not a real skill check."
+        },
+        "workflow": {
+          "grade": 2,
+          "evidence": "Synthetic fixture: workflow assessment, not a real skill check."
+        }
+      }
+    }
+  ]
+}

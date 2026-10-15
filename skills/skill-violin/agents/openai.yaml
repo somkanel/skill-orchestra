@@ -1,0 +1,4 @@
+interface:
+  display_name: "🎻 首席琴师"
+  short_description: "Audit duplicate skills, overlapping triggers, and workflow conflicts"
+  default_prompt: "使用 $skill-violin 只读检查我的技能库，解释重叠和冲突，并提出具体调整建议。"

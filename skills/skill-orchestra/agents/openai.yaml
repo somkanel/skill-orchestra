@@ -1,0 +1,4 @@
+interface:
+  display_name: "🎼 Skill Orchestra · 技能乐团"
+  short_description: "Explain skill matches, compare task fit, and conduct the work"
+  default_prompt: "使用 $skill-orchestra 为当前任务解释技能类型、比较候选适配度，并在选择确定后继续执行。"
