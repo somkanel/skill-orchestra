@@ -218,4 +218,4 @@ python3 tools/package.py --output /tmp/skill-orchestra-draft
 | 版本怎样演进 | [更新记录](CHANGELOG.md) · [真实迭代与快照](docs/history.md) |
 | 如何参与 | [贡献指南](CONTRIBUTING.md) · [发布流程](docs/releasing.md) · [提交问题](https://github.com/somkanel/skill-orchestra/issues/new/choose) |
 
-代码与技能指引采用 [MIT](LICENSE)。命名和角色分工参考同作者的 [🎪 Video Circus](https://github.com/somkanel/video-circus)，未引入其视频处理代码或依赖；详见[第三方说明](THIRD_PARTY_NOTICES.md)。
+代码与技能指引采用 [MIT](LICENSE)。

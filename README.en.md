@@ -218,4 +218,4 @@ The current input protocol is `score-2`. Legacy records require evidence reasses
 | How the project evolved | [Changelog](CHANGELOG.md) · [Preserved development history](docs/history.md) |
 | How to contribute | [Contributing](CONTRIBUTING.md) · [Releasing](docs/releasing.md) · [Report an issue](https://github.com/somkanel/skill-orchestra/issues/new/choose) |
 
-Code and skill instructions use [MIT](LICENSE). Naming and role design were inspired by the same author's [🎪 Video Circus](https://github.com/somkanel/video-circus), without its video-processing code or dependencies. See [third-party notices](THIRD_PARTY_NOTICES.md).
+Code and skill instructions use [MIT](LICENSE).
