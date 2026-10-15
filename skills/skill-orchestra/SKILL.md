@@ -2,7 +2,7 @@
 name: skill-orchestra
 description: Resolve competing skills when several available skills could perform the same task stage. Compare task fit from full instructions and relevant supporting evidence, explain tradeoffs, and continue with the selected skill. Also use for explicit skill selection or library governance; skip comparisons for clear single-skill tasks.
 metadata:
-  version: "0.5.0"
+  version: "0.5.1"
 ---
 
 # 🎼 Skill Orchestra · 技能乐团

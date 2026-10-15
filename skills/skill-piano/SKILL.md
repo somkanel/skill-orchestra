@@ -2,7 +2,7 @@
 name: skill-piano
 description: Compare multiple skills for the same task stage using a shared fit rubric, explain the scores, and ask the user to resolve a top-score tie. Use for skill-choice comparisons, not product rankings or unrelated scoring.
 metadata:
-  version: "0.5.0"
+  version: "0.5.1"
 ---
 
 # 🎹 Skill Piano · 钢琴师

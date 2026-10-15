@@ -8,7 +8,7 @@ A skill suite for Codex and similar agent harnesses: **understand the task → c
 
 When installed skills overlap, explain what kind of capability the task needs, identify relevant skills visible in the current session, and compare them using one rubric. A top-score tie belongs to the user, with concrete tradeoffs explained first.
 
-Version **0.5.0 is a local development build**. It is unpublished, with limited project-level entry and task checks in Codex CLI; cross-harness acceptance remains incomplete. See [validation](docs/validation.md) for the actual evidence.
+The recommended version is **[0.5.1 public preview](https://github.com/somkanel/skill-orchestra/releases/tag/v0.5.1)**, with limited project-level entry and task checks in Codex CLI; cross-harness acceptance remains incomplete. See [validation](docs/validation.md) for the actual evidence.
 
 ## Why Orchestra?
 
@@ -18,14 +18,14 @@ Commands use familiar instrument names with a shared `skill-` prefix: orchestra,
 
 ## Install and update
 
-Copy the three complete directories under `skills/` from this project or extracted draft ZIP to a Codex discovery location:
+Download the [v0.5.1 source ZIP](https://github.com/somkanel/skill-orchestra/releases/download/v0.5.1/skill-orchestra-0.5.1.zip), verify the SHA-256 file on the same release, extract it, and copy the three complete directories under `skills/` to a Codex discovery location:
 
 | Scope | Location |
 | --- | --- |
 | User | `~/.agents/skills/` |
 | Project | `<project>/.agents/skills/` |
 
-Keep references, scripts, agent metadata and licenses intact. Start a fresh session and verify all three entries before explicit invocation. Check the actual harness discovery list if its version uses different paths. No public repository URL or online installation command is provided yet.
+Keep references, scripts, agent metadata and licenses intact. Start a fresh session and verify all three entries before explicit invocation. Check the actual harness discovery list if its version uses different paths. Historical versions document development; usage tracking in 0.2.0 was withdrawn. Install the recommended version.
 
 Before updating, back up existing folders and preserve custom preferences and voice changes. Avoid installing the same instance into multiple discovery locations. Full installation shares voice guidance; individual skills retain their core workflow without the conductor. Installation does not change harness settings.
 
@@ -80,6 +80,6 @@ The scoring helper works locally without network access. Agent inference depends
 
 ## Documentation and license
 
-[Voice](skills/skill-orchestra/references/voice.md) · [Scoring](skills/skill-piano/references/scoring.md) · [Evaluation](docs/evaluation.md) · [Validation](docs/validation.md) · [Contributing](CONTRIBUTING.md) · [Releasing](docs/releasing.md) · [Changelog](CHANGELOG.md)
+[Voice](skills/skill-orchestra/references/voice.md) · [Scoring](skills/skill-piano/references/scoring.md) · [Evaluation](docs/evaluation.md) · [Validation](docs/validation.md) · [Contributing](CONTRIBUTING.md) · [Releasing](docs/releasing.md) · [Changelog](CHANGELOG.md) · [Development history](docs/history.md)
 
 [MIT](LICENSE). Naming and modular role design were inspired by [Video Circus](https://github.com/somkanel/video-circus). No video-processing code, dependencies, private records or third-party binaries are bundled.

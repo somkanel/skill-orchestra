@@ -43,6 +43,25 @@ class PackageTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 module.build(ROOT, Path(a) / 'dist')
 
+    def test_dangling_output_links_rejected(self):
+        module = load('package')
+        version = (ROOT / 'VERSION').read_text().strip()
+        for suffix in ('.zip', '.sha256'):
+            with self.subTest(suffix=suffix), tempfile.TemporaryDirectory() as temp:
+                output = Path(temp) / 'out'
+                output.mkdir()
+                outside = Path(temp) / 'outside'
+                link = output / ('skill-orchestra-' + version + '-draft' + suffix)
+                try:
+                    link.symlink_to(outside)
+                except OSError:
+                    self.skipTest('OS does not permit creating symlinks for this test')
+                with self.assertRaises(ValueError):
+                    module.build(ROOT, output)
+                self.assertFalse(outside.exists())
+                self.assertTrue(link.is_symlink())
+                self.assertEqual(list(output.iterdir()), [link])
+
     def test_source_filter_excludes_private_root_files(self):
         names = [p.relative_to(ROOT).parts[0] for p in load('package').sources(ROOT)]
         self.assertNotIn('dist', names)

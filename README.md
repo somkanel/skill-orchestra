@@ -8,7 +8,7 @@
 
 安装许多相近的技能后，不必靠记住名称来选择。技能乐团说明任务需要哪类能力，找出当前会话可见的相关技能，用同一套标准比较，并把理由讲清楚。最高分相同，先说明取舍，再由你决定。
 
-当前为 **0.5.0 本地开发版**，尚未发布到 GitHub；已做有限的 Codex CLI 项目级入口和任务验收，尚未完成跨宿主全面验证。程序和包装验证范围见 [验证记录](docs/validation.md)。
+当前推荐 **[0.5.1 公开预览版](https://github.com/somkanel/skill-orchestra/releases/tag/v0.5.1)**；已做有限的 Codex CLI 项目级入口和任务验收，尚未完成跨宿主全面验证。程序和包装验证范围见 [验证记录](docs/validation.md)。
 
 ## 为什么叫 Orchestra
 
@@ -18,7 +18,7 @@
 
 ## 安装与更新
 
-从本项目目录或解压后的草案包中，将 `skills/` 下三个完整目录复制到 Codex 技能目录：
+从 [v0.5.1 下载源码包](https://github.com/somkanel/skill-orchestra/releases/download/v0.5.1/skill-orchestra-0.5.1.zip) 并核对同页 SHA-256，解压后将 `skills/` 下三个完整目录复制到 Codex 技能目录：
 
 | 范围 | 位置 |
 | --- | --- |
@@ -27,7 +27,7 @@
 
 必须保留各目录内的引用、脚本、元信息和 LICENSE；不要复制 `docs/` 或旧草案归档作为技能。安装后新建会话，检查三个技能是否可见，再显式调用验证。宿主版本可能采用其他发现路径，应以其实际列表为准。
 
-更新前备份同名目录，比较并保留自定义的表达和偏好。只向一个发现位置安装同一实例，避免双重安装导致同名歧义。项目当前没有在线安装命令或公开下载地址，不要使用猜测的仓库链接。
+更新前备份同名目录，比较并保留自定义的表达和偏好。只向一个发现位置安装同一实例，避免双重安装导致同名歧义。历史版本用于查看演进，其中 0.2.0 的频次统计已撤回；安装请选择当前推荐版本。
 
 三个技能不自动修改宿主配置。独立使用钢琴师或首席琴师时，核心指令仍可运行；完整安装三者可共享表达约定与编排。
 
@@ -90,6 +90,6 @@ python3 tools/package.py --output /tmp/skill-orchestra-draft
 
 ## 文档与许可
 
-[表达约定](skills/skill-orchestra/references/voice.md) · [评分规则](skills/skill-piano/references/scoring.md) · [行为评测](docs/evaluation.md) · [验证记录](docs/validation.md) · [贡献指南](CONTRIBUTING.md) · [发布流程](docs/releasing.md) · [更新记录](CHANGELOG.md)
+[表达约定](skills/skill-orchestra/references/voice.md) · [评分规则](skills/skill-piano/references/scoring.md) · [行为评测](docs/evaluation.md) · [验证记录](docs/validation.md) · [贡献指南](CONTRIBUTING.md) · [发布流程](docs/releasing.md) · [更新记录](CHANGELOG.md) · [真实迭代与快照](docs/history.md)
 
 采用 [MIT](LICENSE) 许可。项目只包含技能、程序、合成案例和文档；命名与角色分工参考 [Video Circus](https://github.com/somkanel/video-circus)，未引入其视频处理代码或运行依赖。

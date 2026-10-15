@@ -52,16 +52,19 @@ def build(root, output):
     name = 'skill-orchestra-' + version + '-draft'
     archive = output / (name + '.zip')
     checksum = output / (name + '.sha256')
-    if archive.exists() or checksum.exists():
+    if any(path.exists() or path.is_symlink() for path in (archive, checksum)):
         raise ValueError('Draft output already exists; use a new output directory')
-    with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED) as zipped:
-        for path in entries:
-            info = zipfile.ZipInfo(name + '/' + path.relative_to(root).as_posix(), (2026, 1, 1, 0, 0, 0))
-            info.compress_type = zipfile.ZIP_DEFLATED
-            info.external_attr = 0o100644 << 16
-            zipped.writestr(info, path.read_bytes())
-    digest = hashlib.sha256(archive.read_bytes()).hexdigest()
-    checksum.write_text(digest + '  ' + archive.name + '\n', encoding='utf-8')
+    # Exclusive creation also rejects links introduced after the preflight check.
+    with archive.open('xb') as raw, checksum.open('x', encoding='utf-8') as sums:
+        with zipfile.ZipFile(raw, 'w', compression=zipfile.ZIP_DEFLATED) as zipped:
+            for path in entries:
+                info = zipfile.ZipInfo(name + '/' + path.relative_to(root).as_posix(), (2026, 1, 1, 0, 0, 0))
+                info.compress_type = zipfile.ZIP_DEFLATED
+                info.external_attr = 0o100644 << 16
+                zipped.writestr(info, path.read_bytes())
+        raw.flush()
+        digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+        sums.write(digest + '  ' + archive.name + '\n')
     return archive, checksum
 
 

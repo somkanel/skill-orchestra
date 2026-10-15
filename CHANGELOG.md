@@ -1,5 +1,12 @@
 # Changelog / 更新记录
 
+## 0.5.1 · Public preview / 公开预览
+
+- 打包时拒绝悬空输出链接，避免把草案写到意外位置。
+- 公开保存的开发快照、差异与版本标签，说明首次入库时间及缺失快照。
+- Reject dangling output links when packaging to avoid writing drafts to unintended locations.
+- Publish preserved development snapshots, diffs and tags with clear import dates and snapshot gaps.
+
 ## 0.5.0 — Local development / 本地开发版
 
 - 用户在开场或后续明确指定技能时直接遵从，自动准入、排名、平局只作用于未指定场景。
@@ -43,6 +50,6 @@
 - 有证据的适配评分与计算工具，保留未知、最高分平局和用户明确选择。
 - 双语文档、合成示例、回归测试、项目检查与可重复草案打包。
 
-This version is not a published release. Local program tests do not establish real harness routing quality.
+Versions 0.1.0 through 0.5.0 are preserved local development snapshots, imported at initial repository publication; see [history](docs/history.md). Local program tests do not establish real harness routing quality.
 
-本版尚未公开发布。本地程序验证不能替代真实宿主的技能选择与表达验收。
+0.1.0 至 0.5.0 是首次公开建库时补录的本地开发历史，详见[快照说明](docs/history.md)。本地程序验证不能替代真实宿主的技能选择与表达验收。
