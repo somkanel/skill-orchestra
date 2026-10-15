@@ -2,7 +2,7 @@
 name: skill-violin
 description: Audit a skill library for duplicate identities, overlapping triggers, workflow conflicts, and stale routing preferences. Use for library governance or discovery audits; scoring skills for one task belongs to skill-piano.
 metadata:
-  version: "0.1.0"
+  version: "0.3.0"
 ---
 
 # 🎻 Skill Violin · 首席琴师
@@ -11,7 +11,7 @@ metadata:
 
 角色是协调技能之间的分工与配合，不是给用户增加管理步骤。遵循 [表达约定](../skill-orchestra/references/voice.md)，用 🎻 开始整理说明；先说发现及其影响，再给具体建议。若总入口未安装，仍按本段原则工作，不因表达引用缺失阻断整理。
 
-记录名称、描述、来源、实际绝对路径、可核实的调用政策与状态。分别标注会话可见、文件可读、宿主已启用，证据不足就写未知。解析符号链接以识别同一实例，同时保留宿主发现路径供配置使用。
+可用钢琴师的 `scripts/inspect_skills.py` 对已指定目录作只读盘点，按其 [协议](../skill-piano/references/protocol.md) 解释范围和错误；缺少工具时手工核实。记录名称、描述、来源、实际绝对路径、可核实的调用政策与状态。分别标注会话可见、文件可读、宿主已启用，证据不足就写未知。解析符号链接以识别同一实例，同时保留宿主发现路径供配置使用。
 
 按产物、动作、环境、阶段分组；对疑似重叠组读取全文核实，区分替代关系与独立职责。相似描述只是候选风险，不直接定性为冲突。确认冲突需具体的不兼容流程或真实行为证据。不要据此生成通用质量排行榜；针对单个任务评分调用 skill-piano。
 

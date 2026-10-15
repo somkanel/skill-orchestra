@@ -1,6 +1,19 @@
 # Changelog / 更新记录
 
-## 0.2.0 — Local development / 本地开发版
+## 0.3.0 — Local development / 本地开发版
+
+- 只读收集指定技能入口，去重真实实例，报告不完整范围；不执行候选内容。
+- 真实评分核对文件快照，拒绝入口变更、缺失来源与重复实例。
+- 明确交付验收条件、选择后验证与失败归因；不宣称质量或触发效果已被证明。
+- Add scoped source inspection, snapshot checks and task acceptance guidance.
+
+## 0.2.1 — Local development / 本地开发版
+
+- 移除使用频次、台账、记录脚本和相关测试，聚焦技能选择。
+- 明确证据范围、质量判断边界，新增可选宿主入口说明。
+- Remove usage tracking and add evidence boundaries and optional harness integration guidance.
+
+## 0.2.0 — Withdrawn local draft / 已撤回的本地草案
 
 - 在适配分后显示本机已记录使用、近30天次数和最近使用时间；未知历史不填0。
 - 新增SQLite台账，同一任务同一实例去重，频次不参与评分或破平局。

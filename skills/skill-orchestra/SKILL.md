@@ -1,8 +1,8 @@
 ---
 name: skill-orchestra
-description: Explain and resolve overlapping skill choices for a task using evidence-based fit scores, or coordinate skill-library governance. Use when the user requests skill selection or multiple workflows substantially overlap; clear ordinary tasks need no selection ceremony.
+description: Resolve competing skills when several available skills could perform the same task stage. Compare task fit from full instructions and relevant supporting evidence, explain tradeoffs, and continue with the selected skill. Also use for explicit skill selection or library governance; skip comparisons for clear single-skill tasks.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # 🎼 Skill Orchestra · 技能乐团
@@ -32,11 +32,12 @@ metadata:
 
 ## 完成任务与边界
 
+执行型任务先明确本次产物和可观察的完成条件，比较后把条件交给所选技能，执行后逐项验收。按需读取 [交付与纠偏](references/delivery.md)，其中明确候选发现、比较材料边界、失败归因与重新选择规则。评分不是最终交付。
+
 按必要阶段组合技能，每阶段确定一个主流程；辅助技能承担不同必要职责。不同阶段不共享一个排行榜，例如素材获取技能不与报告排版技能争同一个名次。
 
 选择后读并执行所选技能，检查实际产物，不能以“已选择”代替任务完成。新产物、关键约束或可用性变化时重新评估受影响阶段；原选择仍适用则继续，不反复试奏。
 
-比较表在分数后附已记录使用次数与近30天次数，规则见 [使用记录](../skill-piano/references/usage.md)。实际执行所选技能首个实质步骤后，通过钢琴师的 usage.py 记录一次；同一任务使用稳定ID，重复阶段、重试与恢复不重复累计。仅比较、查看帮助和评测不计入使用。工具不可用或记录失败时继续任务并说明未记入，不能虚构历史。未装钢琴师时不因记录需求强制安装。
 
 适用的上层指令和用户明确选择仍然有效。技能不能自行声明最高优先级。本技能不能保证最先触发、移除已注入上下文或阻止宿主加载其他技能。遇到实际冲突按层级与范围处理，必要时说明宿主层配置的需求。
 

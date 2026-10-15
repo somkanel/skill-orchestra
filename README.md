@@ -8,7 +8,7 @@
 
 安装许多相近的技能后，不必靠记住名称来选择。技能乐团说明任务需要哪类能力，找出当前会话可见的相关技能，用同一套标准比较，并把理由讲清楚。最高分相同，先说明取舍，再由你决定。
 
-当前为 **0.2.0 本地开发版**，尚未发布到 GitHub 或在真实 Harness 新会话中完成行为验收。程序和包装验证范围见 [验证记录](docs/validation.md)。
+当前为 **0.3.0 本地开发版**，尚未发布到 GitHub 或在真实 Harness 新会话中完成行为验收。程序和包装验证范围见 [验证记录](docs/validation.md)。
 
 ## 为什么叫 Orchestra
 
@@ -61,6 +61,10 @@ $skill-violin 只读检查我的技能库，说明哪些可以互补、哪些容
 
 Agent 负责读取技能、判断档位并解释理由；Python 工具负责校验输入、算分和识别决策状态。工具不会调用技能、验证证据真实性或改变宿主权限。协议与限制见 [评分协议](skills/skill-piano/references/protocol.md)。
 
+普通任务自动协调需要可选的常驻路由约定；仅安装技能无法保证先调用。描述用于初筛，完整指令及相关实现支持适配判断，实际质量仍需产物验收。见 [宿主入口与证据边界](docs/integration.md)。
+
+新增只读入口收集与评分来源核对，处理同一实例去重、缺少来源和入口变更；执行任务先明确完成条件，再验收实际产物。工具不测量语义质量，也不保证自动触发。详见 [交付与纠偏](skills/skill-orchestra/references/delivery.md) 与 [收集和来源协议](skills/skill-piano/references/protocol.md)。
+
 ## 运行与开发
 
 评分工具需要 Python 3.10+，仅标准库，无 API 密钥或新增付费服务。总入口和整理流程由宿主 Agent 执行，没有一键接管所有技能的进程。没有 Python 时可以手算，但需说明未经过程序校验，不自动安装依赖。
@@ -85,10 +89,3 @@ python3 tools/package.py --output /tmp/skill-orchestra-draft
 [表达约定](skills/skill-orchestra/references/voice.md) · [评分规则](skills/skill-piano/references/scoring.md) · [行为评测](docs/evaluation.md) · [验证记录](docs/validation.md) · [贡献指南](CONTRIBUTING.md) · [发布流程](docs/releasing.md) · [更新记录](CHANGELOG.md)
 
 采用 [MIT](LICENSE) 许可。项目只包含技能、程序、合成案例和文档；命名与角色分工参考 [Video Circus](https://github.com/somkanel/video-circus)，未引入其视频处理代码或运行依赖。
-
-
-## 使用频次
-
-适配分后显示“已记录使用”和“近30天”次数，并注明本地台账的记录起点。没有台账显示“未记录”，不能推断历史为0。实际执行后才记录，同一任务同一技能只记一次；比较、推荐与评测不计数。频次不影响适配分或最高分同分的处理。
-
-台账默认保存在 `~/.skill-orchestra/usage.sqlite3`，仅记录路径、稳定任务ID和时间；读取不创建文件，不扫描旧会话。同名不同路径分别记录，符号链接映射同一实例。详见 [使用记录](skills/skill-piano/references/usage.md)。这是技能乐团主动记录的本机使用，不能保证捕获所有宿主中未经过记录的调用。

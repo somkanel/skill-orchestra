@@ -103,26 +103,21 @@ def evaluate(data):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('input', nargs='?', help='JSON input file; omitted or - reads stdin')
-    parser.add_argument('--usage-db', type=Path, help='Read usage counts from this local SQLite ledger')
+    parser.add_argument('--sources', type=Path, help='Verify candidates against an inspected source manifest')
     args = parser.parse_args()
     try:
         raw = Path(args.input).read_text(encoding='utf-8') if args.input and args.input != '-' else sys.stdin.read()
-        result = evaluate(json.loads(raw))
-    except (ValueError, OSError) as error:
+        data = json.loads(raw)
+        result = evaluate(data)
+        if args.sources:
+            from inspect_skills import verify_candidates
+            manifest = json.loads(args.sources.read_text(encoding='utf-8'))
+            result['source_check'] = verify_candidates(data, manifest)
+        else:
+            result['source_check'] = {'status': 'not_checked'}
+    except (ValueError, OSError, RuntimeError) as error:
         print('Scoring input rejected: ' + str(error), file=sys.stderr)
         return 2
-    # History is display-only: evaluate first, never use counts to rank or break ties.
-    from usage import DEFAULT_DB, canonical, summarize
-    import sqlite3
-    try:
-        history = summarize([c['path'] for c in result['candidates']], args.usage_db or DEFAULT_DB)
-        result['usage_scope'] = {'status': history['status'], 'recording_started': history['recording_started']}
-        for candidate in result['candidates']:
-            candidate['usage'] = history['skills'][canonical(candidate['path'])]
-    except (ValueError, OSError, sqlite3.Error):
-        result['usage_scope'] = {'status': 'unavailable', 'recording_started': None}
-        for candidate in result['candidates']:
-            candidate['usage'] = {'total': None, 'last_30_days': None, 'last_used': None}
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0
 

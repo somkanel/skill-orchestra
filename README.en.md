@@ -8,7 +8,7 @@ A skill suite for Codex and similar agent harnesses: **understand the task → c
 
 When installed skills overlap, explain what kind of capability the task needs, identify relevant skills visible in the current session, and compare them using one rubric. A top-score tie belongs to the user, with concrete tradeoffs explained first.
 
-Version **0.2.0 is a local development build**. It has not been published on GitHub or behaviorally accepted in a fresh harness session. See [validation](docs/validation.md) for the actual evidence.
+Version **0.3.0 is a local development build**. It has not been published on GitHub or behaviorally accepted in a fresh harness session. See [validation](docs/validation.md) for the actual evidence.
 
 ## Why Orchestra?
 
@@ -51,6 +51,10 @@ Check mandatory requirements first. Then score delivery fit (30), task coverage 
 
 The agent reads skills, assesses evidence and explains grades. A standard-library Python tool validates records, computes scores and identifies ties or missing evidence. It does not invoke skills or verify the truth of evidence. See the [protocol](skills/skill-piano/references/protocol.md).
 
+Optional persistent harness instructions improve entry routing; installation alone cannot guarantee activation. Fit scores require full instructions and relevant evidence; output quality needs task acceptance. See [harness integration](docs/integration.md).
+
+Read-only entrypoint collection and source checks detect aliases, missing snapshots and changed entrypoints. Execution starts with task acceptance criteria and ends with deliverable checks. These tools do not measure semantic quality or guarantee activation. See [delivery](skills/skill-orchestra/references/delivery.md) and [source protocol](skills/skill-piano/references/protocol.md).
+
 ## Run and develop
 
 The scoring helper needs Python 3.10+ with no third-party dependencies, keys or added paid services. Without Python, manual calculation is possible with an explicit note that programmatic validation was unavailable. Other workflows are agent instructions rather than an autonomous daemon.
@@ -75,10 +79,3 @@ The scoring helper works locally without network access. Agent inference depends
 [Voice](skills/skill-orchestra/references/voice.md) · [Scoring](skills/skill-piano/references/scoring.md) · [Evaluation](docs/evaluation.md) · [Validation](docs/validation.md) · [Contributing](CONTRIBUTING.md) · [Releasing](docs/releasing.md) · [Changelog](CHANGELOG.md)
 
 [MIT](LICENSE). Naming and modular role design were inspired by [Video Circus](https://github.com/somkanel/video-circus). No video-processing code, dependencies, private records or third-party binaries are bundled.
-
-
-## Usage history
-
-Fit scores are followed by recorded uses and uses in the last 30 days. Missing history is unknown, not zero. A local SQLite ledger counts actual execution once per skill instance and stable task ID; comparison, recommendations and evaluation do not count. Counts never change scores, ranking or top-tie handling.
-
-The default ledger is `~/.skill-orchestra/usage.sqlite3`, created only on the first record. It stores skill paths, opaque task IDs and UTC times, without scanning conversations. This is recorded usage on this machine, not complete account-wide history. See [usage rules](skills/skill-piano/references/usage.md).
