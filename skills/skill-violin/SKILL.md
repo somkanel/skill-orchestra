@@ -2,7 +2,7 @@
 name: skill-violin
 description: Audit a skill library for duplicate identities, overlapping triggers, workflow conflicts, and stale routing preferences. Use for library governance or discovery audits; scoring skills for one task belongs to skill-piano.
 metadata:
-  version: "0.3.0"
+  version: "0.4.0"
 ---
 
 # 🎻 Skill Violin · 首席琴师

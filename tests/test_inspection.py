@@ -92,6 +92,46 @@ class InspectionTests(unittest.TestCase):
         self.assertEqual(invalid.returncode, 2)
         self.assertEqual(invalid.stdout, '')
 
+    def test_omitted_inspected_skill_requires_exclusion(self):
+        other = self.root / 'other/SKILL.md'
+        other.parent.mkdir()
+        other.write_text('Different task stage')
+        manifest = inspection.collect([self.skill, other])
+        data = self.data()
+        with self.assertRaisesRegex(ValueError, 'omitted'):
+            inspection.verify_candidates(data, manifest)
+        data['exclusions'] = {str(other): 'Verified different delivery stage.'}
+        checked = inspection.verify_candidates(data, manifest)
+        self.assertEqual(checked['excluded_count'], 1)
+        self.assertTrue(checked['inspected_scope_accounted_for'])
+
+    def test_partial_read_error_cannot_be_called_scope_checked(self):
+        manifest = inspection.collect([self.skill, self.root / 'missing/SKILL.md'])
+        with self.assertRaisesRegex(ValueError, 'unresolved read errors'):
+            inspection.verify_candidates(self.data(), manifest)
+
+    def test_changed_excluded_source_requires_reassessment(self):
+        other = self.root / 'other/SKILL.md'
+        other.parent.mkdir()
+        other.write_text('Different stage')
+        manifest = inspection.collect([self.skill, other])
+        other.write_text('Now covers the same stage')
+        data = self.data()
+        data['exclusions'] = {str(other): 'Different stage'}
+        with self.assertRaisesRegex(ValueError, 'changed'):
+            inspection.verify_candidates(data, manifest)
+
+    def test_scan_exclusions_are_disclosed(self):
+        hidden = self.root / 'dist/packaged/SKILL.md'
+        hidden.parent.mkdir(parents=True)
+        hidden.write_text('Valid but skipped by default scan policy')
+        result = inspection.collect(roots=[self.root])
+        self.assertEqual(len(result['sources']), 1)
+        self.assertEqual(result['skipped_subtrees'][0]['path'], str(self.root / 'dist'))
+        explicit = inspection.collect([hidden])
+        self.assertEqual(len(explicit['sources']), 1)
+        self.assertEqual(explicit['skipped_subtrees'], [])
+
 
 if __name__ == '__main__':
     unittest.main()

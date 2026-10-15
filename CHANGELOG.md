@@ -1,5 +1,13 @@
 # Changelog / 更新记录
 
+## 0.4.0 — Local development / 本地开发版
+
+- score-2协议：逐项核实交付条件，明确缺失或核心交付0档不参选；未知保留待核实，空候选返回no_match。
+- 用户指定和单候选路径不绕过必要能力核实；不设总分及格线。
+- 来源核对要求全部已收集入口有参评或排除理由，部分读取失败不冒称范围完整。
+- 旧score-1被明确拒绝；历史测试资料仍按原版留存，升级需要重新核实证据。
+- Add delivery requirement gates and inspected-scope accountability. Reject legacy input rather than silently bypass the new checks.
+
 ## 0.3.0 — Local development / 本地开发版
 
 - 只读收集指定技能入口，去重真实实例，报告不完整范围；不执行候选内容。

@@ -8,7 +8,7 @@ A skill suite for Codex and similar agent harnesses: **understand the task → c
 
 When installed skills overlap, explain what kind of capability the task needs, identify relevant skills visible in the current session, and compare them using one rubric. A top-score tie belongs to the user, with concrete tradeoffs explained first.
 
-Version **0.3.0 is a local development build**. It has not been published on GitHub or behaviorally accepted in a fresh harness session. See [validation](docs/validation.md) for the actual evidence.
+Version **0.4.0 is a local development build**. It has not been published on GitHub or behaviorally accepted in a fresh harness session. See [validation](docs/validation.md) for the actual evidence.
 
 ## Why Orchestra?
 
@@ -54,6 +54,8 @@ The agent reads skills, assesses evidence and explains grades. A standard-librar
 Optional persistent harness instructions improve entry routing; installation alone cannot guarantee activation. Fit scores require full instructions and relevant evidence; output quality needs task acceptance. See [harness integration](docs/integration.md).
 
 Read-only entrypoint collection and source checks detect aliases, missing snapshots and changed entrypoints. Execution starts with task acceptance criteria and ends with deliverable checks. These tools do not measure semantic quality or guarantee activation. See [delivery](skills/skill-orchestra/references/delivery.md) and [source protocol](skills/skill-piano/references/protocol.md).
+
+Scoring now uses score-2: check each delivery requirement before ranking. Missing core capability excludes a candidate; unknown capability needs evidence; an empty pool returns no_match. Every inspected skill must be compared or explicitly excluded. Legacy inputs require reassessment rather than changing the schema label.
 
 ## Run and develop
 

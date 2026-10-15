@@ -1,6 +1,6 @@
 # 评分计算协议
 
-Python 3.10+，仅标准库。Agent 先依评分规则判断档位并保留证据，再调用 `scripts/score.py`；程序不读取其他技能、不检查宿主配置，也不执行所选技能。
+Python 3.10+，仅标准库。Agent 先明确交付条件、逐项判断能力，再依评分规则判断档位并保留证据，再调用 `scripts/score.py`；程序不读取其他技能、不检查宿主配置，也不执行所选技能。
 
 ```bash
 python3 <skill-piano绝对路径>/scripts/score.py <评分输入.json>
@@ -10,14 +10,19 @@ python3 <skill-piano绝对路径>/scripts/score.py <评分输入.json>
 
 输入字段：
 
-- `schema`：`skill-orchestra/score-1`。
+- `schema`：`skill-orchestra/score-2`。
+- `requirements`：非空且不重复的交付条件字符串列表，来自本次主要产物和用户要求。
+- `checks`：每个候选必须逐项覆盖 requirements；每项为 `{"status": "supported", "evidence": "具体依据"}`，status 可为 supported、missing、unknown。明确缺失则有效 eligibility 为 ineligible；未知则为 unknown。正文支持只证明指令适配，不等于产出质量已实测。
+- 可选 `exclusions`：以已收集但不参评的技能绝对路径为键、排除理由为值的对象。来源核对要求全部快照参加比较或有排除理由；同阶段但能力差的候选应进入比较并标记不适用，不能偷偷排除。
 - `task`、`stage`：非空的任务与阶段说明，一次仅比较同一阶段。
-- `candidates`：非空数组，每项包含唯一 `id`、`name`、真实绝对 `path`、`eligibility`、`eligibility_evidence` 和 `scores`。程序按记录区分路径，不证明路径真实可读；Agent 负责核实和解析同一实例。
+- `candidates`：数组（允许空，返回 no_match），每项包含唯一 `id`、`name`、真实绝对 `path`、`eligibility`、`eligibility_evidence`、`checks` 和 `scores`。程序按记录区分路径，不证明路径真实可读；Agent 负责核实和解析同一实例。
 - `eligibility`：`eligible`、`ineligible` 或 `unknown`；证据说明硬性条件符合、不符合或尚未知的原因。
 - `scores`：必须含 delivery、coverage、environment、constraints、workflow 五项；每项为 `{"grade": 2, "evidence": "实际依据"}`。grade 仅为整数 0、1、2 或 null；未知原因也必须写 evidence。不适用候选可使用 null 并说明为何无需继续评分。
 - 可选 `user_choice`：真实用户明确选择的候选 id；不得从默认偏好、界面预选或沉默生成此字段。
 
-五项权重固定，未知字段被拒绝。当前版本不支持自定义权重；用户要求时先解释限制，不自行改程序或声称已应用新权重。
+输出使用 `skill-orchestra/result-2`，保留声明和有效 eligibility、decision_reasons、requirements 及 exclusions。delivery 或 coverage 为0表示核心交付明确不匹配，候选不参选；这不是总分阈值。未知交付可行性不可因分数低而跳过核实。
+
+旧 score-1 输入被拒绝，需重新核实交付条件并生成 score-2，不能只改版本号补占位证据。五项权重固定，未知字段被拒绝。当前版本不支持自定义权重；用户要求时先解释限制，不自行改程序或声称已应用新权重。
 
 结果状态：
 
@@ -51,3 +56,7 @@ Agent 必须读取完整快照和相关引用后再判断，不能仅生成快�
 CLI结果 `source_check.status` 为 `entrypoints_unchanged` 仅表示入口快照与当前文件一致，不证明模型读过全文、证据语义正确或质量优秀；不带 `--sources` 时为 `not_checked`，不得称为来源已核对。合成测试可不带快照。工具不可用时如实说明手工核对范围。
 
 快照包含本机路径和技能全文，放在私有任务目录，不写入公共包或安装目录。不持久化使用事件、不修改被比较的技能。
+
+来源核对要求快照 errors 为空，且已收集入口均进入候选或 exclusions。返回 inspected_scope_accounted_for 只证明这个已收集范围有交代，不能证明宿主名单完整、排除理由正确或 Agent 已读懂全文。读取错误先解决；无法解决时明确不完整范围，不声称获得完整来源核对。
+
+根目录盘点默认跳过 `.git`、`__pycache__`、`node_modules`、`dist` 子目录，实际跳过路径记录在 skipped_subtrees，来源核对结果也保留该范围。若宿主名单包含其中的技能，按显式入口路径补收集，不把默认目录盘点当作宿主全量名单。目录符号链接仅检查直接的SKILL.md，不递归链接树；嵌套技能按宿主具体路径显式补入。

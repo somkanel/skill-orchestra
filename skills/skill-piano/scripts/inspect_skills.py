@@ -13,7 +13,7 @@ SKIP = {'.git', '__pycache__', 'node_modules', 'dist'}
 
 def collect(paths=(), roots=()):
     discovered = [Path(p).expanduser().absolute() for p in paths]
-    errors = []
+    errors, skipped = [], []
     for value in roots:
         root = Path(value).expanduser().absolute()
         if not root.is_dir():
@@ -24,6 +24,8 @@ def collect(paths=(), roots=()):
             errors.append({'path': str(error.filename), 'error': str(error)})
 
         for directory, dirs, files in os.walk(root, followlinks=False, onerror=failed):
+            skipped.extend({'path': str(Path(directory) / d), 'reason': 'Default scan exclusion'}
+                           for d in sorted(dirs) if d in SKIP)
             dirs[:] = sorted(d for d in dirs if d not in SKIP)
             parent = Path(directory)
             if 'SKILL.md' in files:
@@ -53,15 +55,20 @@ def collect(paths=(), roots=()):
             errors.append({'path': str(path), 'error': str(error)})
     return {'schema': 'skill-orchestra/sources-1',
             'scope': {'paths': [str(p) for p in paths], 'roots': [str(p) for p in roots]},
-            'host_visibility': 'not_checked', 'sources': list(records.values()), 'errors': errors}
+            'host_visibility': 'not_checked', 'skipped_subtrees': skipped,
+            'sources': list(records.values()), 'errors': errors}
 
 
 def verify_candidates(data, manifest):
     """Bind each score candidate to an unchanged local entrypoint snapshot."""
     if not isinstance(manifest, dict) or manifest.get('schema') != 'skill-orchestra/sources-1':
         raise ValueError('Unsupported sources manifest')
+    if not isinstance(manifest.get('sources'), list) or not isinstance(manifest.get('errors'), list):
+        raise ValueError('Invalid source manifest records')
+    if manifest['errors']:
+        raise ValueError('Inspection scope has unresolved read errors; resolve before source-checked selection')
     records = {}
-    for item in manifest.get('sources', []):
+    for item in manifest['sources']:
         if not isinstance(item, dict):
             raise ValueError('Invalid source record')
         path, text, digest = item.get('path'), item.get('text'), item.get('sha256')
@@ -83,7 +90,20 @@ def verify_candidates(data, manifest):
         if hashlib.sha256(path.read_bytes()).hexdigest() != records[key]['sha256']:
             raise ValueError('Skill changed after inspection; inspect and reassess: ' + key)
         checked.add(key)
+    excluded = set()
+    for value in data.get('exclusions', {}):
+        path = str(Path(value).resolve(strict=True))
+        if path not in records or path in checked or path in excluded:
+            raise ValueError('Invalid or overlapping source exclusion: ' + path)
+        if hashlib.sha256(Path(path).read_bytes()).hexdigest() != records[path]['sha256']:
+            raise ValueError('Excluded source changed after inspection: ' + path)
+        excluded.add(path)
+    omitted = set(records) - checked - excluded
+    if omitted:
+        raise ValueError('Inspected skills omitted without an exclusion reason: ' + ', '.join(sorted(omitted)))
     return {'status': 'entrypoints_unchanged', 'candidate_count': len(checked),
+            'excluded_count': len(excluded), 'inspected_scope_accounted_for': True,
+            'scan_skipped_subtrees': manifest.get('skipped_subtrees', []),
             'limits': 'Checks source snapshots only, not evidence semantics, references, quality or host visibility.'}
 
 

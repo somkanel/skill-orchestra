@@ -1,5 +1,5 @@
 {
-  "schema": "skill-orchestra/score-1",
+  "schema": "skill-orchestra/score-2",
   "task": "Synthetic example: create an editable brand deck",
   "stage": "Create slides",
   "candidates": [
@@ -30,6 +30,12 @@
           "grade": 1,
           "evidence": "Synthetic fixture: workflow assessment, not a real skill check."
         }
+      },
+      "checks": {
+        "Produce an editable brand deck": {
+          "status": "supported",
+          "evidence": "Synthetic fixture: editable deck production assumed; not an actual capability test."
+        }
       }
     },
     {
@@ -59,7 +65,16 @@
           "grade": 2,
           "evidence": "Synthetic fixture: workflow assessment, not a real skill check."
         }
+      },
+      "checks": {
+        "Produce an editable brand deck": {
+          "status": "supported",
+          "evidence": "Synthetic fixture: editable deck production assumed; not an actual capability test."
+        }
       }
     }
+  ],
+  "requirements": [
+    "Produce an editable brand deck"
   ]
 }

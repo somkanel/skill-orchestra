@@ -23,16 +23,31 @@ def nonempty(value, label):
 
 
 def evaluate(data):
-    fields(data, ('schema', 'task', 'stage', 'candidates'), ('user_choice',))
-    if data['schema'] != 'skill-orchestra/score-1':
+    fields(data, ('schema', 'task', 'stage', 'requirements', 'candidates'), ('user_choice', 'exclusions'))
+    if data['schema'] != 'skill-orchestra/score-2':
         raise ValueError('Unsupported scoring schema')
     for key in ('task', 'stage'):
         nonempty(data[key], key)
-    if not isinstance(data['candidates'], list) or not data['candidates']:
-        raise ValueError('At least one candidate is required')
+    if not isinstance(data['candidates'], list):
+        raise ValueError('Candidates must be an array')
+    requirements = data['requirements']
+    if not isinstance(requirements, list) or not requirements:
+        raise ValueError('At least one task delivery requirement is required')
+    for requirement in requirements:
+        nonempty(requirement, 'requirement')
+    if len(set(requirements)) != len(requirements):
+        raise ValueError('Task requirements must be unique')
+    if 'exclusions' in data:
+        if not isinstance(data['exclusions'], dict):
+            raise ValueError('Exclusions must map absolute paths to reasons')
+        for path, reason in data['exclusions'].items():
+            nonempty(path, 'excluded path')
+            nonempty(reason, 'exclusion reason')
+            if not (PurePosixPath(path).is_absolute() or PureWindowsPath(path).is_absolute()):
+                raise ValueError('Excluded source path must be absolute')
     records, identities, paths = [], set(), set()
     for candidate in data['candidates']:
-        fields(candidate, ('id', 'name', 'path', 'eligibility', 'eligibility_evidence', 'scores'))
+        fields(candidate, ('id', 'name', 'path', 'eligibility', 'eligibility_evidence', 'checks', 'scores'))
         for key in ('id', 'name', 'path', 'eligibility_evidence'):
             nonempty(candidate[key], key)
         if not (PurePosixPath(candidate['path']).is_absolute()
@@ -44,6 +59,21 @@ def evaluate(data):
         paths.add(candidate['path'])
         if candidate['eligibility'] not in ('eligible', 'ineligible', 'unknown'):
             raise ValueError('Invalid eligibility')
+        fields(candidate['checks'], tuple(requirements))
+        effective = candidate['eligibility']
+        reasons = []
+        for requirement in requirements:
+            check = candidate['checks'][requirement]
+            fields(check, ('status', 'evidence'))
+            nonempty(check['evidence'], 'requirement evidence')
+            if check['status'] not in ('supported', 'missing', 'unknown'):
+                raise ValueError('Invalid requirement check status')
+            if check['status'] == 'missing':
+                effective = 'ineligible'
+                reasons.append('Missing delivery requirement: ' + requirement)
+        if effective != 'ineligible' and any(c['status'] == 'unknown' for c in candidate['checks'].values()):
+            effective = 'unknown'
+            reasons.append('Delivery requirement evidence is incomplete')
         fields(candidate['scores'], tuple(WEIGHTS))
         lower, upper, complete, parts = 0, 0, True, {}
         for key, weight in WEIGHTS.items():
@@ -62,15 +92,22 @@ def evaluate(data):
                 lower += points
                 upper += points
                 parts[key] = points
-        excluded = candidate['eligibility'] == 'ineligible'
-        records.append({**candidate, 'points': parts,
+        # A zero in either core dimension contradicts ability to deliver this stage.
+        # This is a semantic gate, not an arbitrary total-score threshold.
+        if any(candidate['scores'][key]['grade'] == 0 for key in ('delivery', 'coverage')):
+            effective = 'ineligible'
+            reasons.append('Core delivery or task coverage is explicitly unmatched')
+        excluded = effective == 'ineligible'
+        records.append({**candidate, 'declared_eligibility': candidate['eligibility'],
+                        'eligibility': effective, 'decision_reasons': reasons, 'points': parts,
                         'total': lower if complete and not excluded else None,
                         'range': None if excluded else [lower, upper]})
 
     def result(state, selected=None, options=()):
-        return {'schema': 'skill-orchestra/result-1', 'task': data['task'],
-                'stage': data['stage'], 'weights': WEIGHTS.copy(), 'state': state,
-                'selected': selected, 'options': list(options), 'candidates': records}
+        return {'schema': 'skill-orchestra/result-2', 'task': data['task'],
+                'stage': data['stage'], 'requirements': requirements, 'weights': WEIGHTS.copy(), 'state': state,
+                'selected': selected, 'options': list(options), 'candidates': records,
+                'exclusions': data.get('exclusions', {})}
 
     if 'user_choice' in data:
         nonempty(data['user_choice'], 'user_choice')
@@ -90,8 +127,8 @@ def evaluate(data):
     if not certain:
         return result('needs_evidence', options=[c['id'] for c in possible])
     highest = max(c['total'] for c in certain)
-    unresolved = [c for c in possible if (c['eligibility'] == 'unknown' or c['total'] is None)
-                  and c['range'][1] >= highest]
+    unresolved = [c for c in possible if c['eligibility'] == 'unknown'
+                  or (c['total'] is None and c['range'][1] >= highest)]
     if unresolved:
         return result('needs_evidence', options=[c['id'] for c in unresolved])
     top = [c['id'] for c in certain if c['total'] == highest]

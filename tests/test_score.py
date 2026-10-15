@@ -20,13 +20,14 @@ def candidate(identity, grades=(2, 2, 2, 2, 2), status='eligible'):
     keys = ('delivery', 'coverage', 'environment', 'constraints', 'workflow')
     return dict(id=identity, name=identity, path='/sample/' + identity + '/SKILL.md',
                 eligibility=status, eligibility_evidence='Fixture: required format and tools checked.',
+                checks={'Deliver the requested artifact': dict(status='supported', evidence='Synthetic capability assumed.')},
                 scores={k: dict(grade=v, evidence='Fixture evidence for ' + k)
                         for k, v in zip(keys, grades)})
 
 
 def request(*candidates):
-    return dict(schema='skill-orchestra/score-1', task='Create an editable deck',
-                stage='Create slides', candidates=list(candidates))
+    return dict(schema='skill-orchestra/score-2', task='Create an editable deck',
+                stage='Create slides', requirements=['Deliver the requested artifact'], candidates=list(candidates))
 
 
 class ScoreTests(unittest.TestCase):
@@ -58,7 +59,7 @@ class ScoreTests(unittest.TestCase):
         self.assertEqual(result['candidates'][1]['range'], [84, 100])
 
     def test_unknown_cannot_win_does_not_block(self):
-        result = self.module.evaluate(request(candidate('A'), candidate('B', (0, 0, 0, None, 0))))
+        result = self.module.evaluate(request(candidate('A'), candidate('B', (1, 1, 0, None, 0))))
         self.assertEqual(result['selected'], 'A')
 
     def test_unknown_eligibility_can_win_blocks(self):
