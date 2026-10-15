@@ -37,22 +37,24 @@ class DeliveryGateTests(unittest.TestCase):
         result = self.score.evaluate(request(candidate('A'), self.check(candidate('B', (1,)*5), 'unknown')))
         self.assertEqual(result['state'], 'needs_evidence')
 
-    def test_user_choice_cannot_override_missing_capability(self):
+    def test_user_choice_missing_capability_is_advisory(self):
         data = request(self.check(candidate('A'), 'missing'), candidate('B'))
         data['user_choice'] = 'A'
         result = self.score.evaluate(data)
-        self.assertEqual(result['state'], 'choice_unavailable')
-        self.assertIsNone(result['selected'])
+        self.assertEqual(result['state'], 'user_selected')
+        self.assertEqual(result['selected'], 'A')
+        self.assertEqual(result['candidates'][0]['eligibility'], 'ineligible')
+        self.assertTrue(result['advisories'])
 
-    def test_user_choice_unknown_capability_waits(self):
+    def test_user_choice_unknown_capability_is_advisory(self):
         data = request(self.check(candidate('A'), 'unknown'))
         data['user_choice'] = 'A'
-        self.assertEqual(self.score.evaluate(data)['state'], 'needs_evidence')
+        self.assertEqual(self.score.evaluate(data)['state'], 'user_selected')
 
-    def test_user_choice_zero_core_is_unavailable(self):
+    def test_user_choice_zero_core_is_retained(self):
         data = request(candidate('A', (0,)*5))
         data['user_choice'] = 'A'
-        self.assertEqual(self.score.evaluate(data)['state'], 'choice_unavailable')
+        self.assertEqual(self.score.evaluate(data)['state'], 'user_selected')
 
     def test_every_requirement_must_be_addressed(self):
         data = request(candidate('A'))

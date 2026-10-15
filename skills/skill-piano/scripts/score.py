@@ -114,11 +114,14 @@ def evaluate(data):
         if data['user_choice'] not in identities:
             raise ValueError('user_choice does not identify a candidate')
         chosen = next(c for c in records if c['id'] == data['user_choice'])
-        if chosen['eligibility'] == 'ineligible':
-            return result('choice_unavailable')
-        if chosen['eligibility'] == 'unknown':
-            return result('needs_evidence', options=[chosen['id']])
-        return result('user_selected', selected=chosen['id'])
+        selected = result('user_selected', selected=chosen['id'])
+        # User choice is a routing decision, not a claim that capability is proven.
+        selected['advisories'] = chosen['decision_reasons'][:]
+        if chosen['eligibility'] != 'eligible':
+            selected['advisories'].append(chosen['eligibility_evidence'])
+        if chosen['total'] is None and chosen['eligibility'] == 'eligible':
+            selected['advisories'].append('Some fit dimensions remain unassessed; explicit choice retained')
+        return selected
 
     possible = [c for c in records if c['eligibility'] != 'ineligible']
     if not possible:

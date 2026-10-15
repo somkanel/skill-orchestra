@@ -1,5 +1,11 @@
 # Changelog / 更新记录
 
+## 0.5.0 — Local development / 本地开发版
+
+- 用户在开场或后续明确指定技能时直接遵从，自动准入、排名、平局只作用于未指定场景。
+- 评分器user_choice返回user_selected，能力缺口保留为advisories；移除choice_unavailable，不伪造能力判断。
+- Explicit user choice bypasses admission and ranking; capability findings remain advisory.
+
 ## 0.4.0 — Local development / 本地开发版
 
 - score-2协议：逐项核实交付条件，明确缺失或核心交付0档不参选；未知保留待核实，空候选返回no_match。

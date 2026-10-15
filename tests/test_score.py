@@ -87,8 +87,9 @@ class ScoreTests(unittest.TestCase):
         data = request(candidate('A', status='ineligible'), candidate('B'))
         data['user_choice'] = 'A'
         result = self.module.evaluate(data)
-        self.assertEqual(result['state'], 'choice_unavailable')
-        self.assertIsNone(result['selected'])
+        self.assertEqual(result['state'], 'user_selected')
+        self.assertEqual(result['selected'], 'A')
+        self.assertTrue(result['advisories'])
 
     def test_missing_evidence_rejected(self):
         data = request(candidate('A'))
@@ -122,12 +123,13 @@ class ScoreTests(unittest.TestCase):
         data['candidates'][0]['path'] = 'C:\\skills\\A\\SKILL.md'
         self.assertEqual(self.module.evaluate(data)['selected'], 'A')
 
-    def test_unknown_explicit_choice_needs_evidence(self):
+    def test_unknown_explicit_choice_is_retained_with_advisory(self):
         data = request(candidate('A', status='unknown'), candidate('B'))
         data['user_choice'] = 'A'
         result = self.module.evaluate(data)
-        self.assertEqual(result['state'], 'needs_evidence')
-        self.assertIsNone(result['selected'])
+        self.assertEqual(result['state'], 'user_selected')
+        self.assertEqual(result['selected'], 'A')
+        self.assertTrue(result['advisories'])
 
     def test_all_unknown_needs_evidence(self):
         result = self.module.evaluate(request(candidate('A', (None,)*5)))

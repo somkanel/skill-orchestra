@@ -29,10 +29,9 @@ python3 <skill-piano绝对路径>/scripts/score.py <评分输入.json>
 | state | 下一步 |
 | --- | --- |
 | ready | 唯一最高分可行候选，优先调用 selected |
-| user_selected | 尊重用户明确选择的可行候选 selected |
+| user_selected | 遵从用户明确指定的 selected；advisories 仅提示能力缺口，不要求重选 |
 | awaiting_choice | options 为全部最高分并列项，解释取舍并等待用户选择 |
 | needs_evidence | options 为可能改变结果的待核实项，先补证据 |
-| choice_unavailable | 用户所选候选不满足必要条件，解释并请求新选择，不自动替换 |
 | no_match | 无可行候选，说明缺口与可行途径 |
 
 结果保留输入顺序和证据，含总分、分项和未知区间；展示时按结果排序，但不把输入顺序作为破平局依据。计算不会验证证据语义、文件存在或档位是否公正，Agent 仍需如实判断。
@@ -60,3 +59,9 @@ CLI结果 `source_check.status` 为 `entrypoints_unchanged` 仅表示入口快�
 来源核对要求快照 errors 为空，且已收集入口均进入候选或 exclusions。返回 inspected_scope_accounted_for 只证明这个已收集范围有交代，不能证明宿主名单完整、排除理由正确或 Agent 已读懂全文。读取错误先解决；无法解决时明确不完整范围，不声称获得完整来源核对。
 
 根目录盘点默认跳过 `.git`、`__pycache__`、`node_modules`、`dist` 子目录，实际跳过路径记录在 skipped_subtrees，来源核对结果也保留该范围。若宿主名单包含其中的技能，按显式入口路径补收集，不把默认目录盘点当作宿主全量名单。目录符号链接仅检查直接的SKILL.md，不递归链接树；嵌套技能按宿主具体路径显式补入。
+
+## 显式指定与自动选择分支
+
+user_choice 来自用户开场或后续对话中的明确调用或选择时，返回 user_selected，即使候选当前有效eligibility为ineligible或unknown。advisories附已知缺口；不改变原能力判断或伪造高分。选择权与能力事实分开：程序不执行技能，也不保证其能完成交付。用户指定无需调用评分器，只有需要比较/留存分析时才走这个完整记录协议；不强迫为显式调用补齐一份排行榜。
+
+不再使用choice_unavailable状态。实际入口不存在时澄清/说明定位问题；缺必要输入、授权或确实无法继续时再提出具体问题，不能只因评分不合格要求用户重选。自动选择的missing/unknown/0档规则保持有效。
