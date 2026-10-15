@@ -8,7 +8,7 @@ A skill suite for Codex and similar agent harnesses: **understand the task → c
 
 When installed skills overlap, explain what kind of capability the task needs, identify relevant skills visible in the current session, and compare them using one rubric. A top-score tie belongs to the user, with concrete tradeoffs explained first.
 
-Version **0.4.0 is a local development build**. It has not been published on GitHub or behaviorally accepted in a fresh harness session. See [validation](docs/validation.md) for the actual evidence.
+Version **0.4.0 is a local development build**. It is unpublished, with limited project-level entry and task checks in Codex CLI; cross-harness acceptance remains incomplete. See [validation](docs/validation.md) for the actual evidence.
 
 ## Why Orchestra?
 
