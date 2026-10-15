@@ -1,5 +1,12 @@
 # Changelog / 更新记录
 
+## 0.2.0 — Local development / 本地开发版
+
+- 在适配分后显示本机已记录使用、近30天次数和最近使用时间；未知历史不填0。
+- 新增SQLite台账，同一任务同一实例去重，频次不参与评分或破平局。
+- Add local recorded usage, 30-day counts and last-used time without influencing fit scores.
+- Read-only queries never create history; retries deduplicate by instance and stable task ID.
+
 ## 0.1.0 — Local development / 本地开发版
 
 - 🎼 Conductor, 🎹 pianist and 🎻 first violin workflows with shared voice guidance.

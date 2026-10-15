@@ -8,7 +8,7 @@
 
 安装许多相近的技能后，不必靠记住名称来选择。技能乐团说明任务需要哪类能力，找出当前会话可见的相关技能，用同一套标准比较，并把理由讲清楚。最高分相同，先说明取舍，再由你决定。
 
-当前为 **0.1.0 本地开发版**，尚未发布到 GitHub 或在真实 Harness 新会话中完成行为验收。程序和包装验证范围见 [验证记录](docs/validation.md)。
+当前为 **0.2.0 本地开发版**，尚未发布到 GitHub 或在真实 Harness 新会话中完成行为验收。程序和包装验证范围见 [验证记录](docs/validation.md)。
 
 ## 为什么叫 Orchestra
 
@@ -85,3 +85,10 @@ python3 tools/package.py --output /tmp/skill-orchestra-draft
 [表达约定](skills/skill-orchestra/references/voice.md) · [评分规则](skills/skill-piano/references/scoring.md) · [行为评测](docs/evaluation.md) · [验证记录](docs/validation.md) · [贡献指南](CONTRIBUTING.md) · [发布流程](docs/releasing.md) · [更新记录](CHANGELOG.md)
 
 采用 [MIT](LICENSE) 许可。项目只包含技能、程序、合成案例和文档；命名与角色分工参考 [Video Circus](https://github.com/somkanel/video-circus)，未引入其视频处理代码或运行依赖。
+
+
+## 使用频次
+
+适配分后显示“已记录使用”和“近30天”次数，并注明本地台账的记录起点。没有台账显示“未记录”，不能推断历史为0。实际执行后才记录，同一任务同一技能只记一次；比较、推荐与评测不计数。频次不影响适配分或最高分同分的处理。
+
+台账默认保存在 `~/.skill-orchestra/usage.sqlite3`，仅记录路径、稳定任务ID和时间；读取不创建文件，不扫描旧会话。同名不同路径分别记录，符号链接映射同一实例。详见 [使用记录](skills/skill-piano/references/usage.md)。这是技能乐团主动记录的本机使用，不能保证捕获所有宿主中未经过记录的调用。

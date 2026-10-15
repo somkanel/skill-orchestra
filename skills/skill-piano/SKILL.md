@@ -2,12 +2,14 @@
 name: skill-piano
 description: Compare multiple skills for the same task stage using a shared fit rubric, explain the scores, and ask the user to resolve a top-score tie. Use for skill-choice comparisons, not product rankings or unrelated scoring.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # 🎹 Skill Piano · 钢琴师
 
 将候选对当前任务的适配差异翻译成用户能理解的比较。读取 [评分规则](references/scoring.md) 与 [解释范式](references/explanation.md)。不要把适配分解释为概率。
+
+在分数后显示 [使用记录](references/usage.md) 中的已记录次数与近30天次数。使用评分CLI的只读结果，不从记忆猜历史；没有台账显示“未记录”。频次仅供参考，不参与评分、排名或破平局。仅比较技能不记为使用。
 
 独立使用时也遵循 [表达约定](../skill-orchestra/references/voice.md)：用 🎹 开始比较说明，先解释任务需要哪类能力，再介绍候选；同分时把具体结果差异说清楚，让用户容易判断。不要用乐器隐喻替代实际能力说明。若总入口未安装，仍按本段原则工作，不因表达引用缺失阻断比较。
 

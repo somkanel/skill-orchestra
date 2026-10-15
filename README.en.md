@@ -8,7 +8,7 @@ A skill suite for Codex and similar agent harnesses: **understand the task → c
 
 When installed skills overlap, explain what kind of capability the task needs, identify relevant skills visible in the current session, and compare them using one rubric. A top-score tie belongs to the user, with concrete tradeoffs explained first.
 
-Version **0.1.0 is a local development build**. It has not been published on GitHub or behaviorally accepted in a fresh harness session. See [validation](docs/validation.md) for the actual evidence.
+Version **0.2.0 is a local development build**. It has not been published on GitHub or behaviorally accepted in a fresh harness session. See [validation](docs/validation.md) for the actual evidence.
 
 ## Why Orchestra?
 
@@ -75,3 +75,10 @@ The scoring helper works locally without network access. Agent inference depends
 [Voice](skills/skill-orchestra/references/voice.md) · [Scoring](skills/skill-piano/references/scoring.md) · [Evaluation](docs/evaluation.md) · [Validation](docs/validation.md) · [Contributing](CONTRIBUTING.md) · [Releasing](docs/releasing.md) · [Changelog](CHANGELOG.md)
 
 [MIT](LICENSE). Naming and modular role design were inspired by [Video Circus](https://github.com/somkanel/video-circus). No video-processing code, dependencies, private records or third-party binaries are bundled.
+
+
+## Usage history
+
+Fit scores are followed by recorded uses and uses in the last 30 days. Missing history is unknown, not zero. A local SQLite ledger counts actual execution once per skill instance and stable task ID; comparison, recommendations and evaluation do not count. Counts never change scores, ranking or top-tie handling.
+
+The default ledger is `~/.skill-orchestra/usage.sqlite3`, created only on the first record. It stores skill paths, opaque task IDs and UTC times, without scanning conversations. This is recorded usage on this machine, not complete account-wide history. See [usage rules](skills/skill-piano/references/usage.md).
